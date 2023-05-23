@@ -2,7 +2,7 @@
 
 This is a preliminary roadmap that could evolve frequently according to requirements.
 
-## v0.2
+## v0.1
 
 - Read Day files from OSCAR structure
 - Implement a Pytorch DataLoader

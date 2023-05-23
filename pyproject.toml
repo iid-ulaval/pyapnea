@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyapnea"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Julien Laumonier", email="julien.laumonier@iid.ulaval.ca" },
 ]
@@ -20,3 +20,4 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/iid-ulaval/pyapnea"
 "Bug Tracker" = "https://github.com/iid-ulaval/pyapnea/issues"
+"Documentation" = "https://pyapnea.readthedocs.io/en/latest/"

@@ -2,12 +2,16 @@ from .data_structure import OSCARSessionHeader, OSCARSession, OSCARSessionData, 
 from ..base_functions import unpack
 
 
-def read_session_header(buffer, position):
+def read_session_header(buffer: bytes, position: int) -> tuple[int, OSCARSessionHeader]:
     """
     Read the header of an OSCAR session file. Only support version >= 10 at the moment.
-    :param buffer: buffer containing the header data
-    :param position: position of the header in the buffer
-    :return: new position after header data in buffer and an OSCARSessionHeader data structure
+
+    Args:
+        buffer: Buffer containing the header data
+        position: Position of the header in the buffer
+
+    Returns:
+        New position after header data in buffer and an `OSCARSessionHeader` data structure
     """
     header_data = OSCARSessionHeader()
     position, (magicnum, version, typ, machid, sessid, s_first, s_last) = unpack(buffer, 'IHHIIqq', position)
@@ -31,12 +35,16 @@ def read_session_header(buffer, position):
     return position, header_data
 
 
-def read_event_metadata(buffer, position):
+def read_event_metadata(buffer: bytes, position: int) -> tuple[int, OSCARSessionEvent]:
     """
     Read one event metadata of an OSCAR session file.
-    :param buffer: buffer containing the session data
-    :param position: position of the current event metadata
-    :return: new position after current event metadata in buffer and an OSCARSessionEvent data structure
+
+    Args:
+        buffer: buffer containing the session data
+        position: position of the current event metadata
+
+    Returns:
+        New position after current event metadata in buffer and an OSCARSessionEvent data structure
     """
     position, (ts1, ts2, evcount, t8, rate, gain, offset, mn, mx, len_dim) = unpack(buffer,
                                                                                     '<qqiBdddddi',
@@ -55,7 +63,7 @@ def read_event_metadata(buffer, position):
     # See QT QDataStream.cpp QDataStream &QDataStream::readBytes(char *&s, uint &l)
     # not totally sure about this but seems to work with signed int length
     if len_dim != -1:
-        position, (dim,) = unpack(buffer, str(len_dim)+'s', position)
+        position, (dim,) = unpack(buffer, str(len_dim) + 's', position)
         event_data.dim = dim.decode('UTF-16-LE')
     else:
         event_data.dim = ''
@@ -70,12 +78,16 @@ def read_event_metadata(buffer, position):
     return position, event_data
 
 
-def read_channel_metadata(buffer, position):
+def read_channel_metadata(buffer: bytes, position: int) -> tuple[int, OSCARSessionChannel]:
     """
     Read metadata of a channel in an OSCAR session file.
-    :param buffer: buffer containing the session data
-    :param position: position of the current channel metadata
-    :return: new position after current channel metadata in buffer and an OSCARSessionChannel data structure
+
+    Args:
+        buffer: buffer containing the session data
+        position: position of the current channel metadata
+
+    Returns:
+        New position after current channel metadata in buffer and an OSCARSessionChannel data structure
     """
     position, (code,) = unpack(buffer, 'I', position)
     position, (size2,) = unpack(buffer, 'h', position)
@@ -89,23 +101,30 @@ def read_channel_metadata(buffer, position):
     return position, channel_data
 
 
-def read_channel_data(buffer, position, data_data, channel_num):
+def read_channel_data(buffer: bytes,
+                      position: int,
+                      data_data: OSCARSessionData,
+                      channel_num: int) -> tuple[int, OSCARSessionChannel]:
     """
     Read data of one channel of an OSCAR session file.
-    :param buffer: buffer containing the session data
-    :param position: position of the channel to read
-    :param data_data: OSCARSessionData structure already filled with other metadata
-    :param channel_num: id of channel to read
-    :return: new position after the channel data and the OSCARSessionChannel data structure
+
+    Args:
+        buffer: buffer containing the session data
+        position: position of the channel to read
+        data_data: OSCARSessionData structure already filled with other metadata
+        channel_num: id of channel to read
+
+    Returns:
+        New position after the channel data and the OSCARSessionChannel data structure
     """
     channel_data = data_data.channels[channel_num]
     for evt_id in range(channel_data.size2):
         event_data = channel_data.events[evt_id]
         # 's' is not correct since it interprets as char
-        position, data = unpack(buffer, 'h'*event_data.evcount, position)
+        position, data = unpack(buffer, 'h' * event_data.evcount, position)
         event_data.data = list(data)
         if event_data.second_field:
-            position, data2 = unpack(buffer, 'h'*event_data.evcount, position)
+            position, data2 = unpack(buffer, 'h' * event_data.evcount, position)
             event_data.data2 = list(data2)
         if event_data.t8 != 0:
             position, time_data = unpack(buffer, 'I' * event_data.evcount, position)
@@ -113,12 +132,16 @@ def read_channel_data(buffer, position, data_data, channel_num):
     return position, channel_data
 
 
-def read_session_data(buffer, position):
+def read_session_data(buffer: bytes, position: int) -> tuple[int, OSCARSessionData]:
     """
     Read the session data of an OSCAR session file.
-    :param buffer: buffer containing the session data
-    :param position: position of the session data in the buffer
-    :return: new position after session data in buffer and an OSCARSessionData data structure
+
+    Args:
+        buffer: buffer containing the session data
+        position: position of the session data in the buffer
+
+    Returns:
+        New position after session data in buffer and an OSCARSessionData data structure
     """
     data_data = OSCARSessionData()
     position, (mcsize,) = unpack(buffer, 'h', position)
@@ -131,12 +154,16 @@ def read_session_data(buffer, position):
     return position, data_data
 
 
-def read_session(buffer, position):
+def read_session(buffer: bytes, position: int) -> tuple[int, OSCARSession]:
     """
     Read a session of an OSCAR session file. Only support version >= 10 at the moment.
-    :param buffer: buffer containing the session
-    :param position: position of the session in the buffer
-    :return: new position after session in buffer and an OSCARSession data structure
+
+    Args:
+        buffer: buffer containing the session
+        position: position of the session in the buffer
+
+    Returns:
+        New position after session in buffer and an OSCARSession data structure
     """
     databytes = None
     compmethod = 0
@@ -163,11 +190,15 @@ def read_session(buffer, position):
     return position, oscar_session
 
 
-def load_session(filename):
+def load_session(filename: str) -> OSCARSession:
     """
     Load an OSCAR session file (.001)
-    :param filename: full path of the file including filename
-    :return: An OSCARSession instance containing data from file
+
+    Args:
+        filename: full path of the file including filename
+
+    Returns:
+        An OSCARSession instance containing data from file
     """
     with open(filename, mode='rb') as file:
         data = file.read()

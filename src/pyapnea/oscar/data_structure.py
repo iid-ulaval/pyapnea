@@ -1,3 +1,8 @@
+"""
+Data structure for an Oscar session. Follow the structure of the file described in the following image:
+
+![image](images/oscar_format.drawio.png)
+"""
 from dataclasses import dataclass, field
 
 

@@ -1,8 +1,17 @@
 import struct
+from typing import Any
 
 
-def binary(num):
-    """ transform a number to a binary format as string (3 => '00000011')"""
+def binary(num: float) -> str:
+    """
+    Transform a number to a binary format as string (3 => '00000011')
+
+    Args:
+        num: number to transform
+
+    Returns:
+        String representing `num`
+    """
     return ''.join('{:0>8b}'.format(c) for c in struct.pack('!f', num))
 
 
@@ -28,12 +37,16 @@ def _debug_individual_unpack(buffer, formt, position):
                 p = p + struct.calcsize(e)
 
 
-def unpack(buffer, formt, position):
+def unpack(buffer: bytes, formt: str, position: int) -> tuple[int, tuple[Any, ...]]:
     """
     Unpack a number of values from buffer beginning at position.
-    :param buffer: Buffer to extract values.
-    :param formt: values format from struct package.
-    :param position: position to begin.
-    :return: new unread position after extract the fields and tuple of fields.
+
+    Args:
+        buffer: Buffer to extract values.
+        formt: values format from struct package.
+        position: position to begin.
+
+    Returns:
+        New unread position after extract the fields and tuple of fields.
     """
     return position + struct.calcsize(formt), struct.unpack_from(formt, buffer, offset=position)

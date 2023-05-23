@@ -1,5 +1,5 @@
 from unittest import TestCase
-from datetime import datetime
+from datetime import datetime, timezone
 
 from dataclasses import asdict
 from src.pyapnea.oscar.oscar_loader import read_session, load_session
@@ -171,5 +171,5 @@ class TestOscarSessionLoader(TestCase):
         df = event_data_to_dataframe(oscar_session_data, 4362)
 
         self.assertEqual(26 * 0.019999999552965164, df.loc[0, 'Te'])
-        self.assertEqual(datetime.strptime('2023-01-17 18:30:05.440', '%Y-%m-%d %H:%M:%S.%f'),
-                         df.loc[0, 'time_absolute'])
+        expected_date = datetime(2023, 1, 17, 18, 30, 5, 440000, tzinfo=timezone.utc)
+        self.assertEqual(expected_date, df.loc[0, 'time_utc'].to_pydatetime())

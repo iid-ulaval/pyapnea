@@ -1,14 +1,21 @@
+from typing import Union
+
 import pandas as pd
 
 from .oscar_constants import CHANNELS
+from .data_structure import OSCARSession, OSCARSessionChannel
 
 
-def get_channel_from_code(oscar_session_data, channel_id):
+def get_channel_from_code(oscar_session_data: OSCARSession, channel_id: int) -> Union[OSCARSessionChannel, None]:
     """
     Get channel data inside OSCARSession data structure from a channel_id
-    :param oscar_session_data: OSCARSession filled from file
-    :param channel_id: one channel id (see channelID in oscar_constants.py)
-    :return: channel data or None if the channelID is not found
+
+    Args:
+        oscar_session_data: OSCARSession filled from file
+        channel_id: one channel id (.value, see channelID in oscar_constants.py)
+
+    Returns:
+        Channel data (`OSCARSessionChannel`) or None if the channelID is not found in the session
     """
     list_result = [item for item in oscar_session_data.data.channels if item.code == channel_id]
     if len(list_result) > 0:
@@ -17,17 +24,19 @@ def get_channel_from_code(oscar_session_data, channel_id):
         return None
 
 
-def event_data_to_dataframe(oscar_session_data, channel_id):
+def event_data_to_dataframe(oscar_session_data: OSCARSession, channel_id: int) -> pd.DataFrame:
     """
-    get the event data as dataframe of an OSCARSession from a channelID
-    :param oscar_session_data: OSCARSession filled from file
-    :param channel_id: one channel id (see channelID in oscar_constants.py)
-    :return: a dataframe with the following columns :
-             "time",  "time_absolute".
-             "data", "data2" (if exists),
-             ChannelID text, ChannelID text +"2" (see oscar_constants.py)
-             if the channelID is not found, return an empty dataframe containing
-             2 columns "time_absolute" and  ChannelID text
+    Get the event data as dataframe of an OSCARSession from a channelID.
+
+    Args:
+        oscar_session_data: OSCARSession filled from file
+        channel_id: One channel id (see channelID in oscar_constants.py)
+
+    Returns:
+        A dataframe with the following columns : ["time",  "time_utc", "data", "data2" (if exists), \
+        ChannelID text, ChannelID text +"2" (see oscar_constants.py) ]. \
+        if the `channel_id` is not found, return an empty dataframe containing \
+        2 columns "time_utc" and ChannelID text
     """
     channel = get_channel_from_code(oscar_session_data, channel_id)
     y_col_name = [c[5] for c in CHANNELS if c[1].value == channel_id][0]
@@ -45,10 +54,11 @@ def event_data_to_dataframe(oscar_session_data, channel_id):
             df['data2'] = channel.events[0].data2
             df[y_col_name + '2'] = df['data2'] * gain
 
-        df['time_absolute'] = df['time'] + channel.events[0].ts1
-        df['time_absolute'] = pd.to_datetime(df['time_absolute'], unit='ms')
+        df['time_utc'] = df['time'] + channel.events[0].ts1
+        df['time_utc'] = pd.to_datetime(df['time_utc'], unit='ms')
+        df['time_utc'] = df['time_utc'].dt.tz_localize('UTC')
 
     else:
-        df = pd.DataFrame(data={'time_absolute': [],
+        df = pd.DataFrame(data={'time_utc': [],
                                 y_col_name: []})
     return df

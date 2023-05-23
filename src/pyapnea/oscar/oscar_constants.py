@@ -1,6 +1,5 @@
 from enum import Enum, auto
 
-
 # Groups
 GRP_CPAP = "CPAP"
 GRP_POS = "POS"
@@ -53,7 +52,6 @@ STR_GRAPH_rMVFluctuation = "rMVFluctuation"
 STR_GRAPH_FlowFull = "FlowFull"
 STR_GRAPH_SPRStatus = "SPRStatus"
 
-
 # Units
 STR_UNIT_M = " m"
 STR_UNIT_CM = " cm"
@@ -72,11 +70,11 @@ STR_UNIT_s = "s"  # seconds shortform
 STR_UNIT_ms = "ms"  # milliseconds
 STR_UNIT_EventsPerHour = "Events/hr"  # Events per hour
 STR_UNIT_Percentage = "%"
-STR_UNIT_Hz = "Hz"          # Hertz
-STR_UNIT_BPM = "bpm"        # Beats per Minute
-STR_UNIT_LPM = "l/min"      # Litres per Minute
+STR_UNIT_Hz = "Hz"  # Hertz
+STR_UNIT_BPM = "bpm"  # Beats per Minute
+STR_UNIT_LPM = "l/min"  # Litres per Minute
 STR_UNIT_Litres = "Litres"
-STR_UNIT_ml = "ml"        # millilitres
+STR_UNIT_ml = "ml"  # millilitres
 STR_UNIT_BreathsPerMinute = "Breaths/min"  # Breaths per minute
 STR_UNIT_Unknown = "?"
 STR_UNIT_Ratio = "ratio"

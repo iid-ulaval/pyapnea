@@ -1,4 +1,4 @@
-# Welcome to pyapnea v0.0.2
+# Welcome to pyapnea v0.0.3
 
 The Python package related to apnea data analysis.
 

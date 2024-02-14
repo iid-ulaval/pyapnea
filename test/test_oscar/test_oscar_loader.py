@@ -150,7 +150,7 @@ class TestOscarSessionLoader(TestCase):
         self.assertDictEqual(expected_oscar_data_dict, oscar_session_data_dict)
 
     def test_read_session(self):
-        filename = '../data/63c6e928.001'
+        filename = '../data/raw/ResMed_1234567890/Events/63c6e928.001'
         with open(filename, mode='rb') as file:  # b is important -> binary
             data = file.read()
             position = 0

@@ -144,7 +144,7 @@ class ChannelID(Enum):
     CPAP_RERA = 0x1006
     CPAP_FlowLimit = 0x1005
     CPAP_SensAwake = 0x100d
-    CPAP_FlowRate = 0x1100
+    CPAP_FlowRate = 0x1100      # 4352
     CPAP_MaskPressure = 0x1101
     CPAP_MaskPressureHi = 0x1102
     CPAP_RespEvent = 0x1112

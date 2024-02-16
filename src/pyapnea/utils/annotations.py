@@ -30,7 +30,7 @@ def generate_annotations(df: pd.DataFrame, length_event=None, output_events_merg
     else:
         result['ApneaEvent'] = result[events_in_origin].sum(axis=1)
         result['ApneaEvent'] = result['ApneaEvent'].apply(lambda x: 1 if (not pd.isnull(x)) and (x != 0) else np.nan)
-        result['ApneaEvent'].fillna(0, inplace=True)
+        result.fillna({'ApneaEvent': 0}, inplace=True)
         if length_event is not None:
             list_index_annot = result.index[result['ApneaEvent'] == 1].tolist()
             for annot_index in list_index_annot:

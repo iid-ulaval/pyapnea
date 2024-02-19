@@ -3,12 +3,12 @@ from typing import List, Optional
 from os import listdir
 from os.path import isfile, join, isdir
 
-from src.pyapnea.oscar.oscar_constants import ChannelID
-from src.pyapnea.oscar.oscar_getter import event_data_to_dataframe
-from src.pyapnea.oscar.oscar_loader import load_session
+from pyapnea.oscar.oscar_constants import ChannelID
+from pyapnea.oscar.oscar_getter import event_data_to_dataframe
+from pyapnea.oscar.oscar_loader import load_session
 from torch.utils.data import Dataset
 
-from src.pyapnea.utils.annotations import generate_annotations
+from pyapnea.utils.annotations import generate_annotations
 
 
 class RawOscarDataset(Dataset):

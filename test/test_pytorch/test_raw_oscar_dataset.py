@@ -1,8 +1,7 @@
-import os
 from unittest import TestCase
 
-from src.pyapnea.pytorch.raw_oscar_dataset import RawOscarDataset
-from src.pyapnea.utils.annotations import get_nb_events
+from pyapnea.pytorch.raw_oscar_dataset import RawOscarDataset
+from pyapnea.utils.annotations import get_nb_events
 
 
 class TestRawOscarDataset(TestCase):

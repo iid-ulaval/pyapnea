@@ -3,8 +3,8 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 
-from src.pyapnea.oscar.oscar_constants import ChannelID
-from src.pyapnea.utils.annotations import generate_annotations
+from pyapnea import ChannelID
+from pyapnea.utils.annotations import generate_annotations
 
 
 class TestAnnotation(TestCase):

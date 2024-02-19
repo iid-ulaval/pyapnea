@@ -1,10 +1,7 @@
 from unittest import TestCase
-from datetime import datetime, timezone
 
 from dataclasses import asdict
-from src.pyapnea.oscar.oscar_loader import read_session, load_session
-from src.pyapnea.oscar.oscar_getter import get_channel_from_code, event_data_to_dataframe
-from src.pyapnea.oscar.oscar_constants import ChannelID
+from pyapnea.oscar.oscar_loader import read_session
 
 expected_oscar_data_dict = {'header': {'magicnumber': 3341948587,
                                        'version': 10,

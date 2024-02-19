@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.pyapnea.oscar.oscar_constants import CHANNELS, ChannelID
+from pyapnea.oscar.oscar_constants import CHANNELS, ChannelID
 
 
 def generate_annotations(df: pd.DataFrame, length_event=None, output_events_merge=None):

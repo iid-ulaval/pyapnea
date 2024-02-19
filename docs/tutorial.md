@@ -253,7 +253,7 @@ gives the following result :
     Columns: [Leak, FlowRate, Obstructive, Hypopnea, ClearAirway, Apnea, ApneaEvent]
     Index: []
 
-No Obstructive event this night ! At last, we can see the number of element in the dataset :
+No Obstructive event this night ! At last, we can see the number of elements in the dataset :
 
     print(len(dataset))
 

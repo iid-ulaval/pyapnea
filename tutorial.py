@@ -1,10 +1,10 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from src.pyapnea.oscar.oscar_loader import load_session
-from src.pyapnea.oscar.oscar_getter import event_data_to_dataframe
-from src.pyapnea.oscar.oscar_constants import ChannelID
-from src.pyapnea.pytorch.raw_oscar_dataset import RawOscarDataset
+from pyapnea.oscar.oscar_loader import load_session
+from pyapnea import event_data_to_dataframe
+from pyapnea import ChannelID
+from pyapnea.pytorch.raw_oscar_dataset import RawOscarDataset
 
 # this will read the file and transform it to an internal data structure (see data_structure.py)
 oscar_session_data = load_session('test/data/raw/ResMed_1234567890/Events/61f5f33c.001')

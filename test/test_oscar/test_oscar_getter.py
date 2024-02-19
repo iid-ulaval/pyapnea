@@ -1,9 +1,9 @@
 from unittest import TestCase
 from datetime import datetime, timezone
 
-from src.pyapnea.oscar.oscar_loader import load_session
-from src.pyapnea.oscar.oscar_getter import get_channel_from_code, event_data_to_dataframe
-from src.pyapnea.oscar.oscar_constants import ChannelID
+from pyapnea.oscar.oscar_loader import load_session
+from pyapnea import get_channel_from_code, event_data_to_dataframe
+from pyapnea import ChannelID
 
 
 class TestOscarSessionGetter(TestCase):

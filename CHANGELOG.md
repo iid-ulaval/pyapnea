@@ -2,7 +2,7 @@
 
 ## v0.1
 
-* [Functionality] Adding RawOscarDataset, a pytorch dataset class for read Oscar. 
+* [Functionality] Adding RawOscarDataset, a pytorch dataset class for reading Oscar. 
 * [Documentation] Adding a short tutorial to explain main functionalities. See issue #2
 
 ## v0.0.4

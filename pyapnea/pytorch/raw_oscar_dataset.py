@@ -21,11 +21,11 @@ class RawOscarDataset(Dataset):
                  channel_ids: Optional[List[ChannelID]] = None):
         """
         Torch dataset for handling raw OSCAR data.
-        This class generates annotations within 1Os before the end of the apnea event.
+        This class generates annotations within 10s before the end of the apnea event.
 
         Args:
             data_path: the data path of the OSCAR data. The path must contain the directory of all CPAP machine.
-            getitem_type: The type of one element obtained by []. Can be 'numpy' or 'dataframe'.
+            getitem_type: The type of one element obtained by the [] operator. Can be 'numpy' or 'dataframe'.
             limits: slice to filter the dataset. None means no limit.
             output_events_merged: List of apnea events (ChannelID) to merge into the 'ApneaEvent' column, None means all apnea event types are merged
             channel_ids: List of channel to get. If None, only CPAP_FlowRate is get.

@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=67.0", "pandas>=2.0.0", "torch"]
+requires = ["setuptools>=67.0", "pandas>=2.2.0", "torch"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyapnea"
-version = "0.0.5a"
+version = "0.1"
 authors = [
   { name="Julien Laumonier", email="julien.laumonier@iid.ulaval.ca" },
 ]

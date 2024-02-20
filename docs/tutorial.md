@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-PyApnea is able to read .001 files from Oscar Data structure. In this tutorial, we'll see how to read a file from this structure and how to transform it to a dataframe.
+PyApnea is able to read .001 files from Oscar Data structure. In this tutorial, we'll see how to read a file from this structure and how to transform it to a dataframe. We'll also see how to use a specialized PyTorch Dataset to read Oscar files.
 
 Loading a .001 file into a dataframe
 -------------------------------
@@ -18,6 +18,8 @@ Assuming you have a file named '61f5f33c.001'. This file can be found in the `te
     # this line takes an internal data structure and transform it into a pandas dataframe
     df = event_data_to_dataframe(oscar_session_data=oscar_session_data,
                                  channel_ids=[ChannelID.CPAP_FlowRate.value])
+
+    print(df)
 
 The result should be the following :
 
@@ -42,6 +44,7 @@ Note that the column `time_utc`, as its name suggests, is the UTC time of the po
                                  channel_ids=[ChannelID.CPAP_FlowRate.value,
                                               ChannelID.CPAP_Obstructive.value,
                                               ChannelID.CPAP_ClearAirway.value])
+    print(df)
 
 And the result :
 
@@ -101,7 +104,7 @@ And the result (some ClearAirway, this night !):
     2022-01-30 06:21:43+00:00     -0.96          NaN         15.0
     2022-01-30 06:31:29+00:00      1.92          NaN         13.0
 
-You can see a kind of strange data here. At 2022-01-30 02:33:23+00:00, there is a ClearAirway event without FlowRate. The following code show the missing values : 
+You can see a kind of strange data here. At 2022-01-30 02:33:23+00:00, there is a ClearAirway event without FlowRate. The following code shows the missing values : 
 
     df = df[(df.index <= '2022-01-30 02:35:23+00:00') & (df.index >= '2022-01-30 02:30:23+00:00')]
     sns.lineplot(df['FlowRate'])
@@ -111,7 +114,7 @@ This code shows :
 
 ![missingvalues](images/missingvalues.png "Missing values")
 
-I do not know what exacly happened at this time. It is not a deliberate stopping machine because this should have been created a new session (thus, a new file). But it seems that this kind of error can happen. That is why `event_data_to_dataframe()` has `mis_value_strategy ` parameter to deal with missing values. Ther are two possibilities at the moment : a `NaN` in a column can be `ignore`, i.e. the rows are not included in the result dataframe, or the `NaN` value can be replaced by a constant float (put any float value in the parameter dictionary). Here is an example of ignoring rows where `CPAP_FlowRate` is `NaN`. 
+I do not know what exactly happened at this time. It is not a deliberate stopping machine because this should have been created a new session (thus, a new file). But it seems that this kind of error can happen. That is why `event_data_to_dataframe()` has `mis_value_strategy ` parameter to deal with missing values. There are two possibilities at the moment : a `NaN` in a column can be `ignore`, i.e., the rows are not included in the result dataframe, or the `NaN` value can be replaced by a constant float (put any float value in the parameter dictionary). Here is an example of ignoring rows where `CPAP_FlowRate` is `NaN`. 
 
     df = event_data_to_dataframe(oscar_session_data=oscar_session_data,
                                  channel_ids=[ChannelID.CPAP_FlowRate.value,
@@ -186,7 +189,7 @@ with the following result:
 
     [397500 rows x 6 columns]
 
-The `channel_ids` parameter allows the user to add some channel to get in place of `CPAP_FlowRate`. Note that all Events channels will be get even if they are not specified in this parameter (see below). Moreover, this will work only with a dataframe. The numpy output produces, at the moment, only the output of the `FlowRate`. It will cause an exception if this channel is not given.
+The `channel_ids` parameter allows the user to add some channel to get in place of `CPAP_FlowRate`. Note that all Events channels will be getting even if they are not specified in this parameter (see below). Moreover, this will work only with a dataframe. The numpy output produces, at the moment, only the output of the `FlowRate`. It will cause an exception if this channel is not given.
 
     dataset = RawOscarDataset(data_path='test/data/raw',
                               getitem_type='dataframe',
@@ -214,7 +217,7 @@ With the following result:
 
 The parameter `output_events_merged` precise what kind of Events are merged into the ApneaEvent column (or the second array for the `numpy` output). 
 
-With all events : 
+With all events included in the `ApneaEvent` column: 
 
     print(dataset[0][dataset[0].ApneaEvent != 0.0])
 
@@ -236,9 +239,9 @@ gives the result:
     
     [2008 rows x 7 columns]
 
-You can note that are more events than when we loaded the file with `event_data_to_dataframe()`. Indeed, the `RawOscarDataset` completes the ApneaEvent with the medical defition of an apnea event. Since the events are marked at the end of the event, an internal function `generate_annotations()` marks all points 10 seconds before each event. Note that only the `ApneaEvent` column is completed. All others event columns are kept like the original data. At the moment, no parameter exists to change the behavior of the annotation.
+<sup>You can note that are more events than when we loaded the file with `event_data_to_dataframe()`. Indeed, the `RawOscarDataset` completes the ApneaEvent with the medical definition of an apnea event. Since the events are marked at the end of the event, an internal function `generate_annotations()` marks all points 10 seconds before each event. Note that only the `ApneaEvent` column is completed. All other event columns are kept like the original data. At the moment, no parameter exists to change the behaviour of the annotation.</sup>
 
-With only ApneaEvent representing `Obstructive`:
+With only ApneaEvent representing `Obstructive`, using the parameter `output_events_merged`:
 
     dataset = RawOscarDataset(data_path='test/data/raw',
                               getitem_type='dataframe',
@@ -253,7 +256,9 @@ gives the following result :
     Columns: [Leak, FlowRate, Obstructive, Hypopnea, ClearAirway, Apnea, ApneaEvent]
     Index: []
 
-No Obstructive event this night ! At last, we can see the number of elements in the dataset :
+No Obstructive event this night ! 
+
+At last, we can see the number of elements in the dataset :
 
     print(len(dataset))
 

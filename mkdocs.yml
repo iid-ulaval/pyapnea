@@ -4,7 +4,7 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [ src ]
+          paths: [ pyapnea ]
           options:
             show_source: false
 

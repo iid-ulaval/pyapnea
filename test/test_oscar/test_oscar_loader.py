@@ -1,10 +1,7 @@
 from unittest import TestCase
-from datetime import datetime, timezone
 
 from dataclasses import asdict
-from src.pyapnea.oscar.oscar_loader import read_session, load_session
-from src.pyapnea.oscar.oscar_getter import get_channel_from_code, event_data_to_dataframe
-from src.pyapnea.oscar.oscar_constants import ChannelID
+from pyapnea.oscar.oscar_loader import read_session
 
 expected_oscar_data_dict = {'header': {'magicnumber': 3341948587,
                                        'version': 10,
@@ -150,7 +147,7 @@ class TestOscarSessionLoader(TestCase):
         self.assertDictEqual(expected_oscar_data_dict, oscar_session_data_dict)
 
     def test_read_session(self):
-        filename = '../data/63c6e928.001'
+        filename = '../data/raw/ResMed_1234567890/Events/63c6e928.001'
         with open(filename, mode='rb') as file:  # b is important -> binary
             data = file.read()
             position = 0

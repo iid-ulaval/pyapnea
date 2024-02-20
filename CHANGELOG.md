@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1
+
+* [Functionality] Adding RawOscarDataset, a pytorch dataset class for read Oscar. 
+* [Documentation] Adding a short tutorial to explain main functionalities. See issue #2
+
 ## v0.0.4
 
 * [Functionality] Adding the possibility to deal with nan values in some channels.
